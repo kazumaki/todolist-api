@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :user do
-    email { Faker::String.random(length: 5) }
+    email { Faker::Internet.email }
   end
 end

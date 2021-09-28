@@ -12,4 +12,8 @@ RSpec.describe User, type: :model do
   it { should validate_length_of(:email).is_at_least(5) }
   it { should validate_uniqueness_of(:email) }
 
+  it 'Do not allow emails with bad format' do
+    user.email = 'foo@bar'
+    expect(user).to be_invalid
+  end
 end
