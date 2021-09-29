@@ -37,10 +37,10 @@ RSpec.describe "Users", type: :request do
 
   describe 'POST /user' do
     # valid payload
-    let(:valid_email) { { email: 'mail@mail.com' } }
+    let(:valid_payload) { { email: 'mail@mail.com', password: 'password', password_confirmation: 'password' } }
 
     context 'when the request is valid' do
-      before { post '/api/v1/users', params: valid_email }
+      before { post '/api/v1/users', params: valid_payload }
       it 'creates a user' do
         expect(json['email']).to eq('mail@mail.com')
       end
