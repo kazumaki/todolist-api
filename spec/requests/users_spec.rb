@@ -63,7 +63,26 @@ RSpec.describe "Users", type: :request do
   end
 
   describe 'PUT /users/:id' do
+    context 'when the payload is valid' do
+      before { put "/api/v1/users/#{user_id}", params: { email: 'mail@mail.com' } }
 
+      it 'returns status code 200' do
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns the user updated' do
+        expect(json['id']).to eq(user_id)
+        expect(json['email']).to eq('mail@mail.com')
+      end
+    end
+
+    context 'when the payload is invalid' do
+      before { put "/api/v1/users/#{user_id}", params: { email: '' } }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
   end
 
   describe 'DELETE /users/:id' do
