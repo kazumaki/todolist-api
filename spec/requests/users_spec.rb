@@ -38,7 +38,7 @@ RSpec.describe "Users", type: :request do
   describe 'POST /user' do
     # valid payload
     let(:valid_payload) { { email: 'mail@mail.com', password: 'password', password_confirmation: 'password' } }
-
+    
     context 'when the request is valid' do
       before { post '/api/v1/users', params: valid_payload }
       it 'creates a user' do
@@ -63,8 +63,17 @@ RSpec.describe "Users", type: :request do
   end
 
   describe 'PUT /users/:id' do
-    context 'when the payload is valid' do
+    let(:valid_token) { JWT.encode(user_id, Rails.application.credentials.secret_key_base.to_s) }
+    context 'when there no jwt authentication' do
       before { put "/api/v1/users/#{user_id}", params: { email: 'mail@mail.com' } }
+
+      it 'returns forbidden' do
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
+    context 'when the payload is valid' do
+      before { put "/api/v1/users/#{user_id}", params: { email: 'mail@mail.com' }, headers: {'Authorization': valid_token} }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(:ok)
@@ -77,7 +86,7 @@ RSpec.describe "Users", type: :request do
     end
 
     context 'when the payload is invalid' do
-      before { put "/api/v1/users/#{user_id}", params: { email: '' } }
+      before { put "/api/v1/users/#{user_id}", params: { email: '' } , headers: {'Authorization': valid_token} }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(:unprocessable_entity)

@@ -20,6 +20,12 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update
+    authenticate
+    unless @current_user
+      head :forbidden
+      return
+    end
+
     if @user.update(user_params)
       render json: @user, status: :ok
     else
@@ -39,5 +45,12 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
     params.permit(:email, :password, :password_confirmation)
+  end
+
+  def authenticate
+    return unless request.headers.key? 'Authorization'
+    header = request.headers['Authorization']
+    token = HashWithIndifferentAccess.new(JWT.decode(header, Rails.application.credentials.secret_key_base.to_s))
+    @current_user = User.find(token.first)
   end
 end
