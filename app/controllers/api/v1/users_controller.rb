@@ -26,6 +26,8 @@ class Api::V1::UsersController < ApplicationController
       return
     end
 
+    return unless @current_user.id == @user.id
+
     if @user.update(user_params)
       render json: @user, status: :ok
     else
@@ -50,7 +52,7 @@ class Api::V1::UsersController < ApplicationController
   def authenticate
     return unless request.headers.key? 'Authorization'
     header = request.headers['Authorization']
-    token = HashWithIndifferentAccess.new(JWT.decode(header, Rails.application.credentials.secret_key_base.to_s))
-    @current_user = User.find(token.first)
+    token = HashWithIndifferentAccess.new(JWT.decode(header, Rails.application.credentials.secret_key_base.to_s)[0])
+    @current_user = User.find(token[:user_id])
   end
 end

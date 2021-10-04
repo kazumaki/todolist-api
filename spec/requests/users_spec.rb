@@ -63,7 +63,7 @@ RSpec.describe "Users", type: :request do
   end
 
   describe 'PUT /users/:id' do
-    let(:valid_token) { JWT.encode(user_id, Rails.application.credentials.secret_key_base.to_s) }
+    let(:valid_token) { JWT.encode({user_id: user_id}, Rails.application.credentials.secret_key_base.to_s) }
     context 'when there no jwt authentication' do
       before { put "/api/v1/users/#{user_id}", params: { email: 'mail@mail.com' } }
 
