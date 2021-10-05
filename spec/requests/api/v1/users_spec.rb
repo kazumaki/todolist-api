@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Users", type: :request do
+RSpec.describe "Api::V1::Users", type: :request do
   let!(:users) { create_list(:user, 5) }
   let!(:user_id) { users.first.id }
 
