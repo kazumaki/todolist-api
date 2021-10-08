@@ -1,10 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe "Api::V1::Sessions", type: :request do
-  describe "GET /index" do
-    pending "add some examples (or delete) #{__FILE__}"
-  end
-
   describe "POST /sessions" do
     let(:valid_user) { User.create(email: 'mail@mail.com', password: 'meme123', password_confirmation: 'meme123')}
 
