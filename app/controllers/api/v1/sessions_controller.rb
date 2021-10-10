@@ -3,7 +3,8 @@ class Api::V1::SessionsController < ApplicationController
 
   def create
     unless @user
-      
+      render json: {}, status: :unauthorized
+      return
     end
 
     unless @user.authenticate(login_params[:password])
