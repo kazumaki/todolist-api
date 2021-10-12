@@ -3,12 +3,12 @@ class Api::V1::SessionsController < ApplicationController
 
   def create
     unless @user
-      render json: {}, status: :unauthorized
+      render json: { message: 'Invalid credentials'}, status: :unauthorized
       return
     end
 
     unless @user.authenticate(login_params[:password])
-      render json: {}, status: :unauthorized
+      render json: { message: 'Invalid credentials'}, status: :unauthorized
       return
     end
 
