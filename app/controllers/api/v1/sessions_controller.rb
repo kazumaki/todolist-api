@@ -8,7 +8,8 @@ class Api::V1::SessionsController < ApplicationController
     end
 
     unless @user.authenticate(login_params[:password])
-
+      render json: {}, status: :unauthorized
+      return
     end
 
     render json: {user: @user, token: JWT.encode({user_id: @user.id}, Rails.application.secrets.secret_key_base)}, status: :created

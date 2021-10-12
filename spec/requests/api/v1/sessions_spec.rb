@@ -14,8 +14,14 @@ RSpec.describe "Api::V1::Sessions", type: :request do
       it { expect(response).to have_http_status(:created) }
     end
 
-    context 'when the user data is invalid' do
+    context 'when the user email is invalid' do
       before { post '/api/v1/sessions', params: { user: { email: 'mymail@mail.com', password: 'meme123' } } }
+
+      it { expect(response).to have_http_status(:unauthorized) }
+    end
+
+    context 'when the user email is valid but the password is wrong' do
+      before { post '/api/v1/sessions', params: { user: { email: valid_user.email, password: 'meme1' } } }
 
       it { expect(response).to have_http_status(:unauthorized) }
     end
